@@ -160,7 +160,7 @@ class Network:
         times = []
         start_time = time.time()
 
-        m = m.shape[1]
+        m = X.shape[1]
 
         for i in range(iterations):
             for j in range(0, m, batch_size):
