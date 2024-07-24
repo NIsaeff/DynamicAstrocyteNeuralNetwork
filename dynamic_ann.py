@@ -5,14 +5,13 @@ from network import Network
 
 class AstrocyteNetwork(Network):
     def __init__(self, sizes, astrocyte_density=1, initial_threshold=0.5, initial_effect=0.1, num_thresholds=3):
-        super().__init__(sizes)
+        super().__init__(sizes, output_discrete=True)
         self.astrocyte_density = astrocyte_density
         self.astrocytes = self.initialize_astrocytes()
         self.num_thresholds = num_thresholds
         
         # Initialize trainable astrocyte parameters
         self.astrocyte_thresholds = [np.full((size, num_thresholds), initial_threshold) for size in sizes[1:]]
-
         self.astrocyte_effects = [np.full((size, num_thresholds), initial_effect) for size in sizes[1:]]
 
     def initialize_astrocytes(self):
@@ -32,7 +31,6 @@ class AstrocyteNetwork(Network):
                 if np.mean(activation, axis=1, keepdims=True)[i] > thresholds[i][j]:
                     threshold = j
             T[i] = threshold
-        # ic(T)
         return T
 
 
@@ -92,8 +90,6 @@ class AstrocyteNetwork(Network):
             dB_current = (1 / m) * np.sum(dZ_current, axis=1, keepdims=True)
             # TODO figure out this algo, how to calculate loss of theshold matrix (list of lists) instead of list
             # Compute gradients for astrocyte parameters 
-
-            # Compute gradients for astrocyte parameters
             dThresholds_current = np.zeros_like(self.astrocyte_thresholds[-l])
             dEffects_current = np.zeros_like(self.astrocyte_effects[-l])
 
@@ -111,6 +107,7 @@ class AstrocyteNetwork(Network):
         return dW, dB, dThreshold, dEffect
 
     def gradient_descent(self, X, Y, alpha, iterations, batch_size=32):
+        m = X.shape[1]
         for i in range(iterations):
             for j in range(0, m, batch_size):
                 X_batch = X[:, j:j+batch_size]
@@ -130,7 +127,7 @@ class AstrocyteNetwork(Network):
 
     def update_params(self, alpha, dW, dB, dThresholds, dEffects):
         super().update_params(alpha, dW, dB)
-        # TODO figure out how to apply loss to theshold matrix (list of lists) instead of list
+        # TODO fix order of thesholds and modulation factors
         for i in range(len(self.astrocyte_thresholds)-1):
             self.astrocyte_thresholds[i] -= alpha * dThresholds[i]
             self.astrocyte_effects[i] -= alpha * dEffects[i]

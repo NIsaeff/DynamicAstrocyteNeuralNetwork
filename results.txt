@@ -1,0 +1,15 @@
+Control:
+
+Evaluation Results:
+Accuracy: 0.8080
+Precision: 0.8078
+Recall: 0.8083
+F1 Score: 0.8071
+
+Astrocyte Network:
+
+Evaluation Results:
+Accuracy: 0.91500
+Precision: 0.9173
+Recall: 0.9160
+F1 Score: 0.9153

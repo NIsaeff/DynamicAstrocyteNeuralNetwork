@@ -1,11 +1,13 @@
 # AstroNet based on average activation of layer
 import numpy as np
 import matplotlib.pyplot as plt
+import time
+
 from network import Network
 
 class AstrocyteNetwork(Network):
     def __init__(self, sizes, astrocyte_density=1, initial_threshold=0.5, initial_effect=0.1):
-        super().__init__(sizes)
+        super().__init__(sizes, output_discrete=True)
         self.astrocyte_density = astrocyte_density
         self.astrocytes = self.initialize_astrocytes()
         
@@ -19,15 +21,9 @@ class AstrocyteNetwork(Network):
     # TODO implement list of activations, thresholds
     # activation is determined by the average acrivation of current layer
     def astrocyte_activation(self, activation, threshold):
-        # ic(np.mean(activation, axis=1, keepdims=True))
-        # ic(threshold)
-        # ic((np.mean(activation, axis=1, keepdims=True) > threshold).astype(float))
         return (np.mean(activation, axis=1, keepdims=True) > threshold).astype(float)
 
     def modify_weights(self, weights, astrocyte_active, effect):
-        ic(astrocyte_active)
-        ic(effect.shape)
-        ic(weights.shape)
         return weights * (1 + astrocyte_active * effect)
 
     def forward_prop(self, X):
@@ -89,6 +85,7 @@ class AstrocyteNetwork(Network):
         return dW, dB, dThreshold, dEffect
 
     def gradient_descent(self, X, Y, alpha, iterations, batch_size=32):
+        m = X.shape[1]
         for i in range(iterations):
             for j in range(0, m, batch_size):
                 X_batch = X[:, j:j+batch_size]
@@ -123,3 +120,36 @@ class AstrocyteNetwork(Network):
         fig.suptitle('Astrocyte Parameters Distribution')
         plt.tight_layout()
         plt.show()
+
+    def train_with_visualization(self, X, Y, alpha, iterations, batch_size=32, eval_interval=10):
+        accuracies = []
+        iterations_list = []
+        times = []
+        start_time = time.time()
+
+        m = X.shape[1]
+
+        for i in range(iterations):
+            for j in range(0, m, batch_size):
+                X_batch = X[:, j:j+batch_size]
+                Y_batch = Y[j:j+batch_size]
+
+                # Skip empty batches
+                if X_batch.shape[1] == 0:
+                    continue
+
+                dW, dB, dThreshold, dEffect = self.backward_prop(X_batch, Y_batch)
+                self.update_params(alpha, dW, dB, dThreshold, dEffect)
+                
+            if i % eval_interval == 0 or i == iterations - 1:
+                predictions = self.get_predictions(X)
+                accuracy = self.get_accuracy(predictions, Y)
+                current_time = time.time() - start_time
+                
+                accuracies.append(accuracy)
+                iterations_list.append(i)
+                times.append(current_time)
+                
+                print(f"Iteration: {i}, Accuracy: {accuracy:.4f}, Time: {current_time:.2f}s")
+
+        self.plot_learning_curves(accuracies, iterations_list, times)
