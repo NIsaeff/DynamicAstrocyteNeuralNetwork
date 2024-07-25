@@ -162,6 +162,11 @@ class Network:
 
         m = X.shape[1]
 
+        current_time = time.time() - start_time
+        accuracies.append(0.0)
+        iterations_list.append(0)
+        times.append(current_time)
+        
         for i in range(iterations):
             for j in range(0, m, batch_size):
                 X_batch = X[:, j:j+batch_size]
@@ -180,7 +185,7 @@ class Network:
                 current_time = time.time() - start_time
                 
                 accuracies.append(accuracy)
-                iterations_list.append(i)
+                iterations_list.append(i + 10)
                 times.append(current_time)
                 
                 print(f"Iteration: {i}, Accuracy: {accuracy:.4f}, Time: {current_time:.2f}s")
@@ -193,16 +198,19 @@ class Network:
         plt.subplot(1, 2, 1)
         plt.plot(times, accuracies)
         plt.title('Accuracy vs. Time')
-        plt.xlabel('Time (seconds)')
-        plt.ylabel('Accuracy')
+        plt.xlabel('Time (seconds)') 
+        # plt.set_xlim([0, 120])
+        plt.ylabel('Accuracy') 
+        plt.ylim(-0.05, 1)
         plt.grid(True)
 
         # Accuracy per iteration
         plt.subplot(1, 2, 2)
         plt.plot(iterations, accuracies)
-        plt.title('Accuracy vs. Iterations')
-        plt.xlabel('Iterations')
-        plt.ylabel('Accuracy')
+        plt.title('Accuracy vs. Iterations') 
+        plt.xlabel('Iterations') 
+        plt.ylabel('Accuracy')  
+        plt.ylim(-0.05, 1)
         plt.grid(True)
 
         plt.tight_layout()
