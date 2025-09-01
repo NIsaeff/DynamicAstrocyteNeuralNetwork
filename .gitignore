@@ -1,0 +1,14 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Agent development files
+AGENTS.md
+
+# Results and data files
+*.pyc
+.DS_Store
