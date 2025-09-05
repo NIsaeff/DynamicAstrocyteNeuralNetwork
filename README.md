@@ -35,8 +35,6 @@ modified_weights = weights * (1 + astrocyte_active * effect_strength)
 The astrocyte system monitors layer-wise activation patterns and dynamically modulates connection weights when activation exceeds learned thresholds.
 
 
-**Improvement**: ~10.7 percentage point accuracy increase with astrocyte dynamics.
-
 ## Datasets
 
 ### Available Datasets
