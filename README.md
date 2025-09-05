@@ -34,14 +34,6 @@ modified_weights = weights * (1 + astrocyte_active * effect_strength)
 
 The astrocyte system monitors layer-wise activation patterns and dynamically modulates connection weights when activation exceeds learned thresholds.
 
-## Results
-
-Performance comparison on classification tasks:
-
-| Network Type | Accuracy | Precision | Recall | F1 Score |
-|-------------|----------|-----------|---------|----------|
-| Control Network | 80.80% | 80.78% | 80.83% | 80.71% |
-| Astrocyte Network | **91.50%** | **91.73%** | **91.60%** | **91.53%** |
 
 **Improvement**: ~10.7 percentage point accuracy increase with astrocyte dynamics.
 
@@ -49,17 +41,8 @@ Performance comparison on classification tasks:
 
 ### Available Datasets
 - **planar_flower.csv** (400 samples): Small 2D classification dataset for initial testing
-- **train.csv** (42K samples, 74MB): Large-scale training data
-- **test.csv** (28K samples, 49MB): Evaluation dataset
-
-### Data Format
-```csv
-y,x1,x2
-0,-1.035531873,-0.912076121
-1,1.44089627,-0.801500713
-```
-- `y`: Class label (0 or 1 for binary classification)
-- `x1, x2`: Input features
+- **train.csv** (42K samples, 74MB): Large-scale training data: MNIST Handwritten Digit (32x32 px)
+- **test.csv** (28K samples, 49MB): MNIST Evaluation dataset
 
 ## Usage
 
