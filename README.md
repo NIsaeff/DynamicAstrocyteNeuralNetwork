@@ -12,7 +12,6 @@ Traditional artificial neural networks lack the dynamic regulatory mechanisms fo
 - **Adaptive Thresholds**: Trainable astrocyte activation thresholds for each network layer
 - **Multi-Threshold Architecture**: Support for multiple threshold levels per astrocyte (research variant)
 - **Biological Inspiration**: Mimics astrocyte calcium signaling and synaptic modulation
-- **Performance Enhancement**: Demonstrated ~13% accuracy improvement over control networks
 
 ## Architecture
 
